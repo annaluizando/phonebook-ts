@@ -14,7 +14,7 @@ import useModal from '@hooks/useModal';
 import useDebounce from '@hooks/useDebonce';
 
 export default function Home() {
-    const { contacts, deleteContact } = useContacts();
+    const { contacts } = useContacts();
     const { errorMessage, errorBubble, handleError } = useErrorHandler();
     const { isOpen: addContactModal, openModal: openAddContactModal, closeModal: closeAddContactModal } = useModal();
     const { isOpen: editContactModal, openModal: openEditContactModal, closeModal: closeEditContactModal } = useModal();
@@ -82,11 +82,11 @@ export default function Home() {
                                         lastName={contact.lastName}
                                         phoneNumber={contact.phoneNumber}
                                         id={contact.id}
-                                        onDelete={() => deleteContact(contact.id)}
-                                        onEdit={() => {
+                                        onEditPress={() => {
                                             setSelectedContact(contact);
                                             openEditContactModal();
                                         }}
+                                        handleError={handleError}
                                     />
                                 </li>
                             ))}

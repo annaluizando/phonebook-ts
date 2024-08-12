@@ -2,8 +2,20 @@ import trashIcon from '@assets/trash.svg';
 import phoneIcon from '@assets/phone.svg';
 import pencilIcon from '@assets/pencil.svg';
 import { ContactCardProps } from '../../types/ContactProps';
+import React from 'react';
+import useContacts from '@hooks/useContacts';
 
-export const ContactCard: React.FC<ContactCardProps> = ({ firstName, lastName, phoneNumber, onDelete, onEdit }) => {
+export const ContactCard: React.FC<ContactCardProps> = ({ id, firstName, lastName, phoneNumber, onEditPress, handleError }) => {
+    const { deleteContact } = useContacts();
+
+    const handleDelete = async () => {
+        try {
+            await deleteContact(id);
+        } catch (error) {
+            handleError(error, 'An unknown error occurred while deleting the contact.');
+        }
+    };
+
     return (
         <>
             <div
@@ -28,14 +40,14 @@ export const ContactCard: React.FC<ContactCardProps> = ({ firstName, lastName, p
                 <div className='grid gap-2'>
                     <button
                         className="rounded-md p-2 border-none bg-slate-500 hover:bg-slate-700 focus:outline-none active:bg-slate-800"
-                        onClick={onEdit}
+                        onClick={onEditPress}
                     >
                         <img src={pencilIcon} alt='edit' className='w-4 h-4' />
                     </button>
 
                     <button
                         className="rounded-md p-2 border-none bg-red-600 hover:bg-red-700 focus:outline-none active:bg-red-800"
-                        onClick={onDelete}
+                        onClick={handleDelete}
                     >
                         <img src={trashIcon} alt='delete' className='w-4 h-4' />
                     </button>

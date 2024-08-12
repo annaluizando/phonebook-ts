@@ -6,6 +6,6 @@ export type Contact = {
 }
 
 export interface ContactCardProps extends Contact {
-    onDelete: () => void;
-    onEdit: () => void;
+    onEditPress: () => void;
+    handleError: (error: unknown, defaultMessage: string) => void;
 }
