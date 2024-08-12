@@ -26,7 +26,13 @@ You can see bellow instructions on how to locally how run the project
     git clone https://github.com/annaluizando/phonebook-ts.git
 ```
 
-2.Run docker
+2.Enter Directory
+
+```bash
+    cd phonebook-ts
+```
+
+3.Run docker
 
 ```bash
     docker-compose up --build
