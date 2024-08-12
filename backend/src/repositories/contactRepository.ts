@@ -12,7 +12,7 @@ export class ContactRepository implements IContactRepository {
         this.contacts.push(contact);
     }
 
-    update(id: string, updatedContact: Partial<IContact>): void {
+    update(id: string, updatedContact: Partial<IContact>): boolean {
         const index = this.contacts.findIndex((contact) => contact.id === id);
         if (index !== -1) {
             this.contacts[index] = {
@@ -20,10 +20,17 @@ export class ContactRepository implements IContactRepository {
                 ...updatedContact,
                 id: this.contacts[index].id,
             };
+            return true
         }
+        return false
     }
 
-    delete(id: string): void {
-        this.contacts = this.contacts.filter((contact) => contact.id !== id);
+    delete(id: string): boolean {
+        const index = this.contacts.findIndex((contact) => contact.id === id);
+        if (index !== -1) {
+            this.contacts = this.contacts.filter((contact) => contact.id !== id);
+            return true
+        }
+        return false
     }
 }

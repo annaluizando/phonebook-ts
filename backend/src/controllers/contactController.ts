@@ -6,42 +6,42 @@ export class ContactController {
 
     getContacts = (req: Request, res: Response) => {
         const contacts = this.contactService.listContacts();
+
+        if (!contacts) {
+            return res.status(404).json('It was not possible to get contacts');
+        }
+
         res.json(contacts);
     }
 
     createContact = (req: Request, res: Response) => {
         const { firstName, lastName, phoneNumber } = req.body;
-        const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+        const result = this.contactService.createContact(firstName, lastName, phoneNumber);
 
-        if (!phoneRegex.test(phoneNumber)) {
-            return res.status(400).json({ message: 'Invalid phone number format. Please use a format like this: 999-999-9999.' });
+        if (!result.success) {
+            return res.status(result.errorCode || 500).json({ message: result.error });
         }
 
-        if (!firstName || firstName.trim() === '' || !lastName || lastName.trim() === '') {
-            return res.status(400).json({ message: 'Invalid inputs. All fields must be provided.' });
-        }
-
-        const contact = this.contactService.createContact(firstName, lastName, phoneNumber);
-        res.status(201).json(contact);
+        res.status(201).json(result.contact);
     }
 
     updateContact = (req: Request, res: Response) => {
         const { firstName, lastName, phoneNumber } = req.body;
-        const phoneRegex = /^\d{3}-\d{3}-\d{4}$/;
+        const result = this.contactService.updateContact(req.params.id, firstName, lastName, phoneNumber);
 
-        if (!phoneRegex.test(phoneNumber)) {
-            return res.status(400).json({ message: 'Invalid phone number format. Please use a format like this: 999-999-9999.' });
+        if (!result.success) {
+            return res.status(result.errorCode || 500).json({ message: result.error });
         }
 
-        const updatedContact = this.contactService.updateContact(req.params.id, firstName, lastName, phoneNumber);
-        if (!updatedContact) {
-            return res.status(404).json({ message: 'This contact was not found.' })
-        }
-        res.json(updatedContact);
+        res.json(result.contact);
     }
 
     deleteContact = (req: Request, res: Response) => {
-        this.contactService.deleteContact(req.params.id);
+        const deletedContact = this.contactService.deleteContact(req.params.id);
+
+        if (!deletedContact) {
+            return res.status(404).json({ message: 'This id was not found.' })
+        }
         res.status(204).send();
     };
 }
