@@ -41,12 +41,21 @@ describe('ContactController', () => {
             expect(response.status).toBe(200);
             expect(response.body).toEqual(contacts);
         });
+
+        it('should return a 404 error if contacts cannot be retrieved', async () => {
+            (contactService.listContacts as jest.Mock).mockReturnValue(undefined);
+
+            const response = await request(app).get('/contacts');
+            expect(response.status).toBe(404);
+            expect(response.body).toEqual("It was not possible to get contacts");
+        });
+
     });
 
     describe('POST /contacts', () => {
         it('should create a new contact with valid data', async () => {
             const newContact = { id: '1', firstName: 'John', lastName: 'Doe', phoneNumber: '123-456-7890' };
-            (contactService.createContact as jest.Mock).mockReturnValue(newContact);
+            (contactService.createContact as jest.Mock).mockReturnValue({ success: true, contact: newContact });
 
             const response = await request(app)
                 .post('/contacts')
@@ -56,20 +65,23 @@ describe('ContactController', () => {
             expect(response.body).toEqual(newContact);
         });
 
-        it('should return a 400 error for invalid phone number format', async () => {
+        it('should return a 400 error for invalid data', async () => {
+            const errorResponse = { success: false, error: 'Invalid phone number format.', errorCode: 400 };
+            (contactService.createContact as jest.Mock).mockReturnValue(errorResponse);
+
             const response = await request(app)
                 .post('/contacts')
                 .send({ firstName: 'John', lastName: 'Doe', phoneNumber: 'invalid-phone' });
 
             expect(response.status).toBe(400);
-            expect(response.body).toEqual({ message: 'Invalid phone number format. Please use a format like this: 999-999-9999.' });
+            expect(response.body).toEqual({ message: 'Invalid phone number format.' });
         });
     });
 
     describe('PUT /contacts/:id', () => {
         it('should update an existing contact', async () => {
             const updatedContact = { id: '1', firstName: 'John', lastName: 'Doe', phoneNumber: '123-456-7890' };
-            (contactService.updateContact as jest.Mock).mockReturnValue(updatedContact);
+            (contactService.updateContact as jest.Mock).mockReturnValue({ success: true, contact: updatedContact });
 
             const response = await request(app)
                 .put('/contacts/1')
@@ -80,7 +92,7 @@ describe('ContactController', () => {
         });
 
         it('should return a 404 error for non-existent contact', async () => {
-            (contactService.updateContact as jest.Mock).mockReturnValue(undefined);
+            (contactService.updateContact as jest.Mock).mockReturnValue({ success: false, error: 'This contact was not found.', errorCode: 404 });
 
             const response = await request(app)
                 .put('/contacts/1')
@@ -93,14 +105,20 @@ describe('ContactController', () => {
 
     describe('DELETE /contacts/:id', () => {
         it('should delete an existing contact', async () => {
-            await request(app).delete('/contacts/1');
-            expect(contactService.deleteContact).toHaveBeenCalledWith('1');
-        });
+            (contactService.deleteContact as jest.Mock).mockReturnValue({ success: true });
 
-        it('should return a 204 status code', async () => {
             const response = await request(app).delete('/contacts/1');
             expect(response.status).toBe(204);
             expect(response.text).toBe('');
+            expect(contactService.deleteContact).toHaveBeenCalledWith('1');
+        });
+
+        it('should return a 404 error if contact does not exist', async () => {
+            (contactService.deleteContact as jest.Mock).mockReturnValue({ success: false, error: 'This contact was not found.', errorCode: 404 });
+
+            const response = await request(app).delete('/contacts/1');
+            expect(response.status).toBe(404);
+            expect(response.body).toEqual({ message: 'This contact was not found.' });
         });
     });
 });
