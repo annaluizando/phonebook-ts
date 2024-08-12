@@ -4,7 +4,7 @@ export interface IContactService {
     listContacts(): IContact[];
     createContact(firstName: string, lastName: string, phoneNumber: string): ContactResult;
     updateContact(id: string, firstName: string, lastName: string, phoneNumber: string): ContactResult;
-    deleteContact(id: string): boolean;
+    deleteContact(id: string): ContactResult;
 }
 
 export interface ContactResult {

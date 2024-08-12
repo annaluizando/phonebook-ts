@@ -53,7 +53,14 @@ export class ContactService implements IContactService {
         return { success: true, contact: existingContact };
     }
 
-    deleteContact(id: string): boolean {
-        return this.contactRepository.delete(id);
+    deleteContact(id: string): ContactResult {
+        const existingContact = this.contactRepository.list().find(contact => contact.id === id);
+
+        if (!existingContact) {
+            return { success: false, errorCode: 404, error: `Contact with id ${id} not found` };
+        }
+
+        this.contactRepository.delete(id);
+        return { success: true };
     }
 }

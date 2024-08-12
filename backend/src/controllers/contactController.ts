@@ -37,11 +37,12 @@ export class ContactController {
     }
 
     deleteContact = (req: Request, res: Response) => {
-        const deletedContact = this.contactService.deleteContact(req.params.id);
+        const result = this.contactService.deleteContact(req.params.id);
 
-        if (!deletedContact) {
-            return res.status(404).json({ message: 'This id was not found.' })
+        if (!result.success) {
+            return res.status(result.errorCode || 500).json({ message: result.error });
         }
+
         res.status(204).send();
     };
 }
