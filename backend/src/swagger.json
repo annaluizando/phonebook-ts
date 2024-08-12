@@ -1,148 +1,177 @@
 {
-  "openapi": "3.0.0",
-  "info": {
-      "title": "Phonebook API",
-      "version": "1.0.0",
-      "description": "API documentation for the Phonebook application"
-  },
-  "servers": [
-      {
-          "url": "http://localhost:8080/api"
-      }
-  ],
-  "paths": {
-      "/contacts": {
-          "get": {
-              "summary": "Get all contacts",
-              "responses": {
-                  "200": {
-                      "description": "A list of contacts",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "type": "array",
-                                  "items": {
-                                      "$ref": "#/components/schemas/Contact"
-                                  }
-                              }
-                          }
-                      }
-                  }
-              }
-          },
-          "post": {
-              "summary": "Create a new contact",
-              "requestBody": {
-                  "required": true,
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/Contact"
-                          }
-                      }
-                  }
-              },
-              "responses": {
-                  "201": {
-                      "description": "Contact created",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/Contact"
-                              }
-                          }
-                      }
-                  },
-                  "400": {
-                      "description": "Invalid input"
-                  }
-              }
-          }
-      },
-      "/contacts/{id}": {
-          "put": {
-              "summary": "Update a contact",
-              "parameters": [
-                  {
-                      "name": "id",
-                      "in": "path",
-                      "required": true,
-                      "description": "ID of the contact to update",
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "requestBody": {
-                  "required": true,
-                  "content": {
-                      "application/json": {
-                          "schema": {
-                              "$ref": "#/components/schemas/Contact"
-                          }
-                      }
-                  }
-              },
-              "responses": {
-                  "200": {
-                      "description": "Contact updated",
-                      "content": {
-                          "application/json": {
-                              "schema": {
-                                  "$ref": "#/components/schemas/Contact"
-                              }
-                          }
-                      }
-                  },
-                  "404": {
-                      "description": "Contact not found"
-                  }
-              }
-          },
-          "delete": {
-              "summary": "Delete a contact",
-              "parameters": [
-                  {
-                      "name": "id",
-                      "in": "path",
-                      "required": true,
-                      "description": "ID of the contact to delete",
-                      "schema": {
-                          "type": "string"
-                      }
-                  }
-              ],
-              "responses": {
-                  "204": {
-                      "description": "Contact deleted"
-                  },
-                  "404": {
-                      "description": "Contact not found"
-                  }
-              }
-          }
-      }
-  },
-  "components": {
-      "schemas": {
-          "Contact": {
-              "type": "object",
-              "properties": {
-                  "firstName": {
-                      "type": "string",
-                      "example": "Anna"
-                  },
-                  "lastName": {
-                      "type": "string",
-                      "example": "Oliveira"
-                  },
-                  "phoneNumber": {
-                      "type": "string",
-                      "example": "999-999-9999"
-                  }
-              },
-              "required": ["firstName", "lastName", "phoneNumber"]
-          }
-      }
-  }
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Phonebook API",
+        "version": "1.0.0",
+        "description": "API documentation for the Phonebook application"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8080/api"
+        }
+    ],
+    "paths": {
+        "/contacts": {
+            "get": {
+                "summary": "Get all contacts",
+                "responses": {
+                    "200": {
+                        "description": "A list of contacts",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Contact"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "summary": "Create a new contact",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Contact"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Contact created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewContact"
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Invalid input"
+                    }
+                }
+            }
+        },
+        "/contacts/{id}": {
+            "put": {
+                "summary": "Update a contact",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of the contact to update",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Contact"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Contact updated",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/NewContact"
+                                }
+                            }
+                        }
+                    },
+                    "404": {
+                        "description": "Contact not found"
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete a contact",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "description": "ID of the contact to delete",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "Contact deleted"
+                    },
+                    "404": {
+                        "description": "Contact not found"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Contact": {
+                "type": "object",
+                "properties": {
+                    "firstName": {
+                        "type": "string",
+                        "example": "Anna"
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "example": "Oliveira"
+                    },
+                    "phoneNumber": {
+                        "type": "string",
+                        "example": "999-999-9999"
+                    }
+                },
+                "required": [
+                    "firstName",
+                    "lastName",
+                    "phoneNumber"
+                ]
+            },
+            "NewContact": {
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "example": "1"
+                    },
+                    "firstName": {
+                        "type": "string",
+                        "example": "Anna"
+                    },
+                    "lastName": {
+                        "type": "string",
+                        "example": "Oliveira"
+                    },
+                    "phoneNumber": {
+                        "type": "string",
+                        "example": "999-999-9999"
+                    }
+                },
+                "required": [
+                    "firstName",
+                    "lastName",
+                    "phoneNumber"
+                ]
+            }
+        }
+    }
 }
