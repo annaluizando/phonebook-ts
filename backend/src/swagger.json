@@ -128,10 +128,6 @@
           "Contact": {
               "type": "object",
               "properties": {
-                  "id": {
-                      "type": "string",
-                      "example": "1"
-                  },
                   "firstName": {
                       "type": "string",
                       "example": "Anna"
@@ -145,7 +141,7 @@
                       "example": "999-999-9999"
                   }
               },
-              "required": ["id", "firstName", "lastName", "phoneNumber"]
+              "required": ["firstName", "lastName", "phoneNumber"]
           }
       }
   }
