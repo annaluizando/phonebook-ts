@@ -70,7 +70,7 @@ You can see bellow instructions on how to locally how run the project
 - Code Review
 - Unitary Tests
 
-## 🗂️ Autors
+## 🗂️ Authors
 
 - [@annaluizando](github.com/annaluizando)
 
