@@ -18,7 +18,7 @@ Phonebook FullStack Application in which user can get existing contacts, create 
 
 You can see bellow instructions on how to locally how run the project
 
-**IMPORTANT**: to run this project you need to have docker installed on your machine and docker service must be initialized, read more on how to install it on [docker](https://docs.docker.com/desktop/?_gl=1*1tathed*_gcl_au*MTQ3NDMyNzE1MC4xNzE2NDg0NTAw*_ga*MTEyMTg4MjI0OS4xNzE2NDgzNTg2*_ga_XJWPQMJYHQ*MTcyMzM0MjAwMy45LjEuMTcyMzM0MjAwNy41Ni4wLjA.)
+**IMPORTANT**: to run this project you need to have docker installed on your machine and docker service must be initialized, read more on how to install it on [docker](https://docs.docker.com/desktop/?_gl=1*1tathed*_gcl_au*MTQ3NDMyNzE1MC4xNzE2NDg0NTAw*_ga*MTEyMTg4MjI0OS4xNzE2NDgzNTg2*_ga_XJWPQMJYHQ*MTcyMzM0MjAwMy45LjEuMTcyMzM0MjAwNy41Ni4wLjA.).
 
 1.Clone the repository
 
