@@ -76,4 +76,6 @@ You can see bellow instructions on how to locally how run the project
 
 ## 🩶 Thank you
 
-I learned more things by doing this project, so thanks for the time you took to see it :D !!
+I learned more things by doing this project, so thanks for the time you took to see it :D !! 
+
+** You are very welcome Anna, thank you for submitting this amazing test! **
