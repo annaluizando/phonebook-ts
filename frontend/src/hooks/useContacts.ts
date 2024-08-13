@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import { Contact } from '../types/ContactProps';
 import { fetchContactsService, addContactService, deleteContactService, updateContactService } from '@services/contactService';
 import useErrorHandler from './useErrorHandler';
@@ -18,9 +18,10 @@ const useContacts = () => {
             return;
         }
 
-        await addContactService(contactData)
+        const newContact = await addContactService(contactData)
             .catch((e) => { throw new Error(e) });
-        await fetchContacts();
+
+        return newContact;
     };
 
     const updateContact = async (id: string, contactData: Omit<Contact, 'id'>) => {
@@ -33,22 +34,18 @@ const useContacts = () => {
             return;
         }
 
-        await updateContactService(id, contactData)
-            .catch((e) => { throw new Error(e) });
-        await fetchContacts();
+        const updatedContact = await updateContactService(id, contactData).catch((e) => { throw new Error(e) });
+        return updatedContact;
     };
-
     const deleteContact = async (id: string) => {
-        await deleteContactService(id)
+        const deleted = await deleteContactService(id)
             .catch((e) => { throw new Error(e) });
         await fetchContacts();
+
+        return deleted;
     };
 
-    useEffect(() => {
-        fetchContacts();
-    }, [fetchContacts, contacts]);
-
-    return { contacts, fetchContacts, addContact, updateContact, deleteContact };
+    return { contacts, setContacts, fetchContacts, addContact, updateContact, deleteContact };
 };
 
 export default useContacts;

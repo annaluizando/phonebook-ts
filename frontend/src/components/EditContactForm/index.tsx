@@ -9,7 +9,8 @@ export const EditContactForm: React.FC<ModalProps> = ({
     firstName,
     lastName,
     phoneNumber,
-    handleError
+    handleError,
+    setContacts,
 }) => {
     const [editedFirstName, setEditedFirstName] = useState(firstName);
     const [editedLastName, setEditedLastName] = useState(lastName);
@@ -30,11 +31,18 @@ export const EditContactForm: React.FC<ModalProps> = ({
         }
 
         try {
-            await updateContact(id, {
+            const updatedContact = await updateContact(id, {
                 firstName: editedFirstName,
                 lastName: editedLastName,
                 phoneNumber: editedPhoneNumber,
             });
+
+            if (updatedContact) {
+                setContacts((prevContacts) =>
+                    prevContacts.map(contact => (contact.id === id ? updatedContact : contact))
+                );
+            }
+
             setModal(false);
         } catch (error) {
             handleError(error, 'An unknown error occurred while updating the contact.');

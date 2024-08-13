@@ -14,7 +14,7 @@ import useModal from '@hooks/useModal';
 import useDebounce from '@hooks/useDebonce';
 
 export default function Home() {
-    const { contacts } = useContacts();
+    const { contacts, setContacts, fetchContacts } = useContacts();
     const { errorMessage, errorBubble, handleError } = useErrorHandler();
     const { isOpen: addContactModal, openModal: openAddContactModal, closeModal: closeAddContactModal } = useModal();
     const { isOpen: editContactModal, openModal: openEditContactModal, closeModal: closeEditContactModal } = useModal();
@@ -27,8 +27,16 @@ export default function Home() {
     );
 
     useEffect(() => {
+        const loadContacts = async () => {
+            try {
+                await fetchContacts();
+            } catch (error) {
+                handleError(error, "Failed to fetch contacts");
+            }
+        };
 
-    }, [contacts]);
+        loadContacts();
+    }, [fetchContacts]);
 
     return (
         <>
@@ -41,11 +49,13 @@ export default function Home() {
             {addContactModal && (
                 <Modal onClose={closeAddContactModal}>
                     <NewContactForm
+                        setContacts={setContacts}
                         setModal={closeAddContactModal}
                         handleError={handleError}
                     />
                 </Modal>
             )}
+
 
             {editContactModal && selectedContact && (
                 <Modal onClose={closeEditContactModal}>
@@ -56,6 +66,7 @@ export default function Home() {
                         lastName={selectedContact.lastName}
                         phoneNumber={selectedContact.phoneNumber}
                         handleError={handleError}
+                        setContacts={setContacts}
                     />
                 </Modal>
             )}
@@ -78,6 +89,7 @@ export default function Home() {
                             {filteredContacts.map(contact => (
                                 <li key={contact.id}>
                                     <ContactCard
+                                        setContacts={setContacts}
                                         firstName={contact.firstName}
                                         lastName={contact.lastName}
                                         phoneNumber={contact.phoneNumber}

@@ -16,7 +16,7 @@ export const fetchContactsService = async (): Promise<Contact[]> => {
 
 export const addContactService = async (
     contactData: { firstName: string; lastName: string; phoneNumber: string; }
-): Promise<void> => {
+): Promise<Contact> => {
     const url = `${import.meta.env.VITE_BACKEND_URL}/contacts`;
     const response = await fetch(url, {
         method: 'POST',
@@ -30,9 +30,12 @@ export const addContactService = async (
         const errorData = await response.json();
         throw new Error(errorData.message || 'Failed to add contact.');
     }
+
+    const newContact: Contact = await response.json();
+    return newContact;
 };
 
-export const updateContactService = async (id: string, contactData: { firstName: string; lastName: string; phoneNumber: string; }): Promise<void> => {
+export const updateContactService = async (id: string, contactData: { firstName: string; lastName: string; phoneNumber: string; }): Promise<Contact> => {
     const url = `${import.meta.env.VITE_BACKEND_URL}/contacts/${id}`;
     const response = await fetch(url, {
         method: 'PUT',
@@ -46,9 +49,13 @@ export const updateContactService = async (id: string, contactData: { firstName:
         const errorData = await response.json();
         throw new Error(errorData.message || `Failed to update contact: ${response.status}`);
     }
+
+    const updatedContact: Contact = await response.json();
+    return updatedContact;
 };
 
-export const deleteContactService = async (id: string): Promise<void> => {
+
+export const deleteContactService = async (id: string) => {
     const url = `${import.meta.env.VITE_BACKEND_URL}/contacts/${id}`;
     const response = await fetch(url, {
         method: 'DELETE',
@@ -57,5 +64,6 @@ export const deleteContactService = async (id: string): Promise<void> => {
     if (!response.ok) {
         throw new Error(`Failed to delete contact: ${response.status}`);
     }
+    return true;
 };
 

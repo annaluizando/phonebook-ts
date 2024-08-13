@@ -3,7 +3,7 @@ import { MainButton } from '../MainButton/index';
 import { ModalProps } from "../../types/ModalProps";
 import useContacts from "@hooks/useContacts";
 
-export const NewContactForm: React.FC<ModalProps> = ({ setModal, handleError }) => {
+export const NewContactForm: React.FC<ModalProps> = ({ setContacts, setModal, handleError }) => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [phoneNumber, setPhoneNumber] = useState('');
@@ -12,23 +12,23 @@ export const NewContactForm: React.FC<ModalProps> = ({ setModal, handleError }) 
     const handleAdd = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
 
-        if (!firstName || !lastName || !phoneNumber) {
-            handleError(new Error('All fields are required to add a contact.'), 'An unknown error occurred.');
-            return;
-        }
-
         try {
-            await addContact({
-                firstName,
-                lastName,
-                phoneNumber
-            });
+            const newContactData = { firstName, lastName, phoneNumber };
+            const newContact = await addContact(newContactData);
+
+            if (newContact) {
+                setContacts((prevContacts) => [
+                    ...prevContacts,
+                    newContact
+                ]);
+            }
 
             setModal(false);
         } catch (error) {
             handleError(error, 'An unknown error occurred while adding the contact.');
         }
     };
+
 
     useEffect(() => {
         const handleEscKey = (event: KeyboardEvent) => {

@@ -5,12 +5,16 @@ import { ContactCardProps } from '../../types/ContactProps';
 import React from 'react';
 import useContacts from '@hooks/useContacts';
 
-export const ContactCard: React.FC<ContactCardProps> = ({ id, firstName, lastName, phoneNumber, onEditPress, handleError }) => {
+export const ContactCard: React.FC<ContactCardProps> = ({ setContacts, id, firstName, lastName, phoneNumber, onEditPress, handleError }) => {
     const { deleteContact } = useContacts();
 
     const handleDelete = async () => {
         try {
-            await deleteContact(id);
+            const deleted = await deleteContact(id);
+
+            if (deleted) {
+                setContacts((prevContacts) => prevContacts.filter(contact => contact.id !== id));
+            }
         } catch (error) {
             handleError(error, 'An unknown error occurred while deleting the contact.');
         }
